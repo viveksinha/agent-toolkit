@@ -1,0 +1,51 @@
+#!/usr/bin/env bash
+# Block push if commits being pushed introduce PII or secrets.
+set -euo pipefail
+
+REPO_ROOT="$(git rev-parse --show-toplevel)"
+CHECK="$REPO_ROOT/scripts/check-pii.sh"
+
+if [[ ! -x "$CHECK" ]]; then
+  echo "PII check skipped: $CHECK not found or not executable"
+  exit 0
+fi
+
+is_null_sha() {
+  [[ "${1:-}" =~ ^0+$ ]]
+}
+
+changed=()
+
+while read -r local_ref local_sha remote_ref remote_sha; do
+  [[ -z "${local_sha:-}" ]] && continue
+  if is_null_sha "$local_sha"; then
+    continue
+  fi
+
+  if is_null_sha "$remote_sha"; then
+    diff_range="$local_sha"
+  else
+    diff_range="$remote_sha..$local_sha"
+  fi
+
+  while IFS= read -r line; do
+    [[ -n "$line" ]] && changed+=("$line")
+  done < <(git diff --name-only --diff-filter=ACMR "$diff_range" 2>/dev/null || true)
+done
+
+if [[ ${#changed[@]} -eq 0 ]]; then
+  exit 0
+fi
+
+# Deduplicate file list
+deduped=()
+for f in "${changed[@]}"; do
+  skip=0
+  for d in "${deduped[@]:-}"; do
+    [[ "$d" == "$f" ]] && skip=1 && break
+  done
+  [[ "$skip" -eq 0 ]] && deduped+=("$f")
+done
+
+echo "Running PII/secret scan on ${#deduped[@]} file(s) in push range..."
+"$CHECK" "${deduped[@]}"

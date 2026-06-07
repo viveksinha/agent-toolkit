@@ -1,0 +1,54 @@
+---
+description: >-
+  Global gate before any git commit or push in any repository. Block PII, secrets,
+  financial data, stock tickers, and portfolio metadata. Run scripts/check-pii.sh
+  (or equivalent patterns) before publishing.
+alwaysApply: true
+---
+
+# No PII, secrets, or portfolio metadata in git
+
+**Applies globally** — every repository, not only agent-toolkit. Before **any** `git add`, `git commit`, or `git push` (including when the user or another rule asks you to push):
+
+## Required scan
+
+1. In agent-toolkit: run `scripts/check-pii.sh` on **staged** files (or named paths).
+2. In any other repo: run that repo's PII script if present, **or** manually check every pattern in **Block** below on all files being committed or pushed.
+
+**Do not push** until the scan is clean.
+
+## Block — refuse to commit or push
+
+Stop immediately if the scan finds any of the following. **Low-risk PII still counts.**
+
+| Category | Examples |
+|----------|----------|
+| Secrets | API keys (`ghp_`, `sk-`, `AKIA`, `AIza`, `xoxb-`), bearer tokens, passwords, private key files (`.pem`, `.key`) |
+| Credential files | `.env`, `.env.*`, `credentials.json`, `secrets.yaml`, broker session cookies (`.cookie`, `*_cookie`) |
+| Contact PII | Email addresses, phone numbers, physical addresses |
+| Identity | SSN, tax IDs, government IDs, full legal names tied to account data |
+| Financial accounts | Account/routing numbers, credit cards, brokerage account IDs (e.g. IBKR `I########`) |
+| Financial exports | IBKR activity statements, portfolio CSVs/XLSX, Trendlyne `*multigroup*.xlsx`, holdings spreadsheets, tax documents |
+| **Stock tickers** | Real symbols in `THEME_CLUSTERS`, ticker arrays, `TICKER + TICKER` cluster lists, or position tables — use `TICKER_A` / `FOO` placeholders only in committed files |
+| **Portfolio metadata** | Holding counts tied to your book (`NN holdings`, `NN equity stocks`), position weights (`SYMBOL at X.X%`), NAV totals, demat quantities, unrealized P&L for named symbols |
+| **Stock clusters** | Thematic or sector groups defined with **your** real tickers (AMC cluster, banking basket, cable names) — generic `Theme A` + placeholders only in git |
+| **Brokerage / market paths** | Absolute paths to export folders, canvas dirs with personal project names, paths embedding personal email or account name |
+| Path leakage | Absolute paths that embed a personal email or account name in the folder path |
+
+**Allowed in committed files** (do not block):
+
+- Obvious placeholders: `TICKER_A`, `FOO`, `BAR`, `XYZ`, `EXAMPLE`, `REDACTED`, `<<placeholder>>`, `your-email@example.com`
+- Generic workflow rules (e.g. "BUY target: 4% of portfolio") with **no** real symbols or counts from your book
+- Public index or sector **category** names (FMCG, Banking) without pairing them to your holdings or weights
+- `github-actions[bot]@users.noreply.github.com`, public GitHub URLs without tokens
+
+## On failure — show alerts, do not push
+
+1. **Refuse** the commit or push. Do not bypass with `--no-verify` unless the user explicitly overrides after reading the alert.
+2. Print a clear **PII ALERT** listing each file and what matched.
+3. Suggest remediation: redact tickers to placeholders, remove counts/weights, move exports to `.gitignore`, use env vars for paths, keep personal `THEME_CLUSTERS` in a local-only file.
+4. Re-scan after fixes; only proceed when clean.
+
+## Never commit these file types
+
+`.env`, `*.pem`, `*.key`, `*.p12`, `*.cookie`, `credentials*.json`, `*activity-statement*`, `*portfolio*.csv`, `*portfolio*.xlsx`, `*multigroup*.xlsx`, brokerage or tax exports.

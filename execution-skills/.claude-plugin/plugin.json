@@ -1,0 +1,18 @@
+{
+  "name": "execution-skills",
+  "description": "Execution skills \u2014 briefings, meeting processing, stakeholder comms, and idea stress-testing to keep you sharp.",
+  "version": "1.0.0",
+  "author": {
+    "name": "Vivek Sinha"
+  },
+  "keywords": [
+    "execution",
+    "briefings",
+    "meetings",
+    "stakeholder-updates",
+    "stress-testing"
+  ],
+  "homepage": "https://github.com/viveksinha/agent-toolkit",
+  "repository": "https://github.com/viveksinha/agent-toolkit",
+  "license": "MIT"
+}

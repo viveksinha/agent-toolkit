@@ -1,0 +1,45 @@
+---
+description: Default folder layout for new project workspaces — organize by purpose (context, planning, scripts, output), not file type.
+alwaysApply: true
+---
+
+# Project folder structure
+
+When creating a **new project folder** or adding files to an **unstructured** workspace, use purpose-based top-level buckets. Do not dump unrelated files at the root.
+
+## Default layout
+
+```
+<project>/
+├── README.md       # what this is, folder map, how to run/build
+├── context/        # inputs: briefs, requirements, source notes, reference material
+├── planning/       # working docs: specs, research, outlines, drafts, analyses
+├── scripts/        # automation: build scripts, generators, one-off tooling
+└── output/         # generated artifacts only (decks, exports, reports, builds)
+```
+
+Add folders only when needed: `assets/` (images, templates), `data/` (inputs too large for context/), `archive/` (superseded work).
+
+## Placement rules
+
+| Put here | Examples |
+|----------|----------|
+| `context/` | Stakeholder asks, meeting notes, course briefs, pasted requirements |
+| `planning/` | Run-of-show, catalogs, PRDs, strategy memos, slide outlines |
+| `scripts/` | `build_*.py`, generators, `requirements.txt` for that script |
+| `output/` | `.pptx`, `.pdf`, `.csv` exports, compiled decks — never edit by hand |
+
+- **Root** — `README.md` plus at most one obvious entrypoint (e.g. `Makefile`). No loose markdown or generated files at root.
+- **Generated ≠ source** — scripts write to `output/`; use paths relative to the project root (`Path(__file__).resolve().parent.parent`), not hardcoded absolute paths.
+- **Naming** — kebab-case for folders and files; descriptive names over dates (`webinar-plan.md` not `plan-v2-final.md` unless versioning is intentional).
+
+## When to apply
+
+- **Do** scaffold this layout when starting a new initiative folder or when the user asks to organize a messy directory.
+- **Do** place new files in the matching bucket without asking, if the project already follows this structure.
+- **Don't** reorganize a mature or domain-specific tree (e.g. `src/`, `tests/`) unless the user asks.
+- **Don't** create empty buckets — add `README.md` when you create the project folder; add subfolders as the first file needs a home.
+
+## README minimum
+
+Every multi-file project folder gets a short `README.md`: one-line purpose, folder tree, and how to regenerate `output/` if scripts exist.

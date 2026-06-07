@@ -1,0 +1,22 @@
+{
+  "name": "product-skills",
+  "description": "Product management skills \u2014 turn messy ideas into specs, design experiments, synthesize research, and draft readouts.",
+  "version": "1.0.0",
+  "author": {
+    "name": "Vivek Sinha"
+  },
+  "keywords": [
+    "product-management",
+    "execution",
+    "prd",
+    "spec",
+    "experiments",
+    "discovery",
+    "research",
+    "synthesis",
+    "readout"
+  ],
+  "homepage": "https://github.com/viveksinha/agent-toolkit",
+  "repository": "https://github.com/viveksinha/agent-toolkit",
+  "license": "MIT"
+}

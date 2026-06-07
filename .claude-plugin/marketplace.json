@@ -1,0 +1,53 @@
+{
+  "name": "agent-toolkit",
+  "owner": {
+    "name": "Vivek Sinha"
+  },
+  "plugins": [
+    {
+      "name": "product-skills",
+      "source": "./product-skills",
+      "description": "Product management skills — turn messy ideas into specs, design experiments, synthesize research, and draft readouts."
+    },
+    {
+      "name": "execution-skills",
+      "source": "./execution-skills",
+      "description": "Execution skills — meeting processing, stakeholder comms, support triage, and idea stress-testing."
+    },
+    {
+      "name": "growth-skills",
+      "source": "./growth-skills",
+      "description": "Growth skills — activation analysis, retention strategies, funnel optimization, and go-to-market planning."
+    },
+    {
+      "name": "launch-skills",
+      "source": "./launch-skills",
+      "description": "Launch skills — plan, message, and execute product launches at any scale."
+    },
+    {
+      "name": "content-marketing-skills",
+      "source": "./content-marketing-skills",
+      "description": "Content marketing skills — long-form writing and platform-native social content."
+    },
+    {
+      "name": "engineering-skills",
+      "source": "./engineering-skills",
+      "description": "Engineering skills — automated data collection and technical workflows."
+    },
+    {
+      "name": "design-skills",
+      "source": "./design-skills",
+      "description": "Design skills — user research, journey mapping, usability analysis, and design critique."
+    },
+    {
+      "name": "sales-skills",
+      "source": "./sales-skills",
+      "description": "Sales skills — pre-call intelligence, churn analysis, and customer briefings."
+    },
+    {
+      "name": "financial-skills",
+      "source": "./financial-skills",
+      "description": "Financial skills — portfolio analysis, brokerage exports, and equity canvas refresh workflows."
+    }
+  ]
+}

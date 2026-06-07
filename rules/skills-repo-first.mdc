@@ -1,0 +1,33 @@
+---
+description: >-
+  When creating or editing agent-toolkit skills, write in this repo (not
+  ~/.cursor/skills/) and run install-cursor.sh or publish-skills.sh to sync.
+---
+
+# Skills — repo-first authoring
+
+## Rule
+
+When adding or editing skills for **agent-toolkit** (this repository):
+
+1. **Author in the repo**, not in `~/.cursor/skills/` directly.
+2. **Placement:**
+   - Most plugins: `{plugin}-skills/skills/{skill-name}/SKILL.md`
+   - engineering-skills: `engineering-skills/{skill-name}/SKILL.md` (no `skills/` subfolder)
+   - financial-skills: `financial-skills/skills/{skill-name}/SKILL.md`
+3. **After changes:** run `./scripts/install-cursor.sh` (or `./scripts/publish-skills.sh` to commit and push).
+4. **New standalone skill** (top-level name in Cursor): add a row to `scripts/skills-manifest.conf`, then run publish.
+
+Do **not** create duplicate top-level copies in `~/.cursor/skills/` by hand — `install-cursor.sh` symlinks them from the repo.
+
+## If you edited ~/.cursor/skills/ by mistake
+
+```bash
+./scripts/sync-from-cursor.sh --dry-run   # preview
+./scripts/sync-from-cursor.sh --apply     # copy into repo
+./scripts/install-cursor.sh               # restore symlinks
+```
+
+## Personal-only overrides
+
+Portfolio **skill templates** live in `financial-skills/`. Your real tickers, weights, and export files do not — configure `THEME_CLUSTERS` and paths locally; never commit holdings data.

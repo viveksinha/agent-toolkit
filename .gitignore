@@ -1,0 +1,14 @@
+.DS_Store
+.env
+.env.*
+*.pem
+*.key
+*.p12
+*.pfx
+credentials*.json
+*activity-statement*
+*portfolio*.csv
+*portfolio*.xlsx
+*multigroup*.xlsx
+*.cookie
+.trendlyne_cookie
